@@ -28,11 +28,14 @@ export default function AddWorkoutModal({ setShow }: Props) {
   const handleAddWorkout = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/api/workouts", {
-        title,
-        reps,
-        load,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/workouts`,
+        {
+          title,
+          reps,
+          load,
+        }
+      );
 
       setTitle("");
       setLoad(0);

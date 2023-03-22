@@ -22,7 +22,9 @@ export default function WorkoutList() {
 
   useEffect(() => {
     const fetchWorkouts = async () => {
-      const response = await axios.get("http://localhost:3001/api/workouts");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/workouts`
+      );
 
       dispatch({ type: "SET_WORKOUTS", payload: response.data });
     };
@@ -31,7 +33,7 @@ export default function WorkoutList() {
 
   const handleDelete = async (id: string) => {
     const response = await axios.delete(
-      `http://localhost:3001/api/workouts/${id}`
+      `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/workouts/${id}`
     );
 
     dispatch({ type: "DELETE_WORKOUT", payload: response.data });
