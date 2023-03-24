@@ -41,8 +41,8 @@ export default function Login() {
               placeholder="Email"
               className={`${
                 emptyFields.includes("title")
-                  ? "rounded border-2 border-red-500 px-2 py-1"
-                  : "rounded border-2 border-green-500 px-2 py-1"
+                  ? "rounded border-2 border-red-500 px-2 py-1 lowercase"
+                  : "rounded border-2 border-green-500 px-2 py-1 lowercase"
               }`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
