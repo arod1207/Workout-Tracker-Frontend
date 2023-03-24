@@ -22,7 +22,7 @@ export const useLogin = () => {
       setIsLoading(true);
       setError("");
       const response = await axios.post(
-        "http://localhost:3001/api/user/login",
+        `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/user/login`,
         {
           email,
           password,
