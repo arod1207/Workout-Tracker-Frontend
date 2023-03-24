@@ -2,8 +2,29 @@ import WorkoutList from "@/components/ WorkoutList";
 import AddWorkoutModal from "@/components/AddWorkoutButton";
 import Navbar from "@/components/Navbar";
 import Head from "next/head";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+
+type Props = {
+  user: string;
+};
 
 export default function Home() {
+  const { user } = useAuthContext() as Props;
+
+  console.log(user);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user]);
+
   return (
     <>
       <Head>

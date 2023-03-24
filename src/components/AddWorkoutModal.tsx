@@ -1,6 +1,7 @@
 import { Dispatch, FormEvent, useState } from "react";
 import axios from "axios";
 import { useWorkoutContext } from "@/hooks/useWorkoutsContext";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 type Props = {
   setShow: (show: boolean) => void;
@@ -17,6 +18,12 @@ type WorkoutProps = {
   }>;
 };
 
+type UserProps = {
+  user: {
+    token: string;
+  };
+};
+
 export default function AddWorkoutModal({ setShow }: Props) {
   const { dispatch } = useWorkoutContext() as WorkoutProps;
   const [title, setTitle] = useState("");
@@ -24,9 +31,16 @@ export default function AddWorkoutModal({ setShow }: Props) {
   const [load, setLoad] = useState(0);
   const [error, setError] = useState("");
   const [emptyFields, setEmptyFields] = useState<string[]>([]);
+  const { user } = useAuthContext() as UserProps;
 
   const handleAddWorkout = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!user) {
+      setError("You must be logged in");
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/workouts`,
@@ -34,6 +48,12 @@ export default function AddWorkoutModal({ setShow }: Props) {
           title,
           reps,
           load,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
 
@@ -44,7 +64,7 @@ export default function AddWorkoutModal({ setShow }: Props) {
       dispatch({ type: "ADD_WORKOUT", payload: response.data });
     } catch (error: any) {
       setEmptyFields(error.response.data.emptyFields);
-      return setError(error.response.data.error);
+      setError(error.response.data.error);
     }
   };
 
@@ -56,7 +76,7 @@ export default function AddWorkoutModal({ setShow }: Props) {
             type="text"
             placeholder="Workout"
             className={`${
-              emptyFields.includes("title")
+              emptyFields?.includes("title")
                 ? "rounded border-2 border-red-500 px-2 py-1"
                 : "rounded border-2 border-green-500 px-2 py-1"
             }`}
@@ -67,7 +87,7 @@ export default function AddWorkoutModal({ setShow }: Props) {
             type="number"
             placeholder="Reps"
             className={`${
-              emptyFields.includes("reps")
+              emptyFields?.includes("reps")
                 ? "rounded border-2 border-red-500 px-2 py-1"
                 : "rounded border-2 border-green-500 px-2 py-1"
             }`}
@@ -78,7 +98,7 @@ export default function AddWorkoutModal({ setShow }: Props) {
             type="number"
             placeholder="Weight"
             className={`${
-              emptyFields.includes("weight")
+              emptyFields?.includes("weight")
                 ? "rounded border-2 border-red-500 px-2 py-1"
                 : "rounded border-2 border-green-500 px-2 py-1"
             }`}

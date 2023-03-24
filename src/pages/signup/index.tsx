@@ -2,18 +2,30 @@ import { FormEvent, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useSignup } from "@/hooks/useSignup";
 import { ClipLoader } from "react-spinners";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { useRouter } from "next/router";
+
+type Props = {
+  user: string;
+};
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emptyFields, setEmptyFields] = useState<string[]>([]);
   const { signup, isLoading, error } = useSignup();
+  const { user } = useAuthContext() as Props;
+  const router = useRouter();
 
   const handleSignup = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
       await signup(email, password);
+
+      if (user) {
+        router.push("/");
+      }
     } catch (error) {
       console.log(error);
     }

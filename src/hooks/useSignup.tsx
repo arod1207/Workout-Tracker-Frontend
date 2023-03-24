@@ -32,7 +32,7 @@ export const useSignup = () => {
       if (response.data) {
         setIsLoading(false);
 
-        localStorage.setItem("user", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.token));
         dispatch({ type: "LOGIN", payload: response.data });
       }
     } catch (error: any) {

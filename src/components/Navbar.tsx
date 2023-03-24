@@ -24,7 +24,9 @@ export default function Navbar() {
     md:h-24 md:justify-between md:px-24"
     >
       <Link href="/">
-        <button className="text-3xl font-bold">Workout Tracker</button>
+        <button className="hidden md:block md:text-3xl md:font-bold">
+          Workout Tracker
+        </button>
       </Link>
 
       {user ? (

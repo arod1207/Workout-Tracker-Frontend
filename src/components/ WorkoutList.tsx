@@ -1,8 +1,9 @@
-import { Dispatch, useEffect } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import axios from "axios";
 import Moment from "react-moment";
 import { useWorkoutContext } from "@/hooks/useWorkoutsContext";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 type Props = {
   _id: string;
@@ -17,33 +18,67 @@ interface WorkoutsProps {
   dispatch: Dispatch<{ type: string; payload?: any }>;
 }
 
+type UserProps = {
+  user: {
+    token: string;
+  };
+};
+
 export default function WorkoutList() {
   const { workouts, dispatch } = useWorkoutContext() as WorkoutsProps;
+  const [error, setError] = useState("");
+  const { user } = useAuthContext() as UserProps;
 
   useEffect(() => {
-    const fetchWorkouts = async () => {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/workouts`
-      );
+    if (!user) {
+      return;
+    }
 
-      dispatch({ type: "SET_WORKOUTS", payload: response.data });
+    const fetchWorkouts = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/workouts`,
+
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        dispatch({ type: "SET_WORKOUTS", payload: response.data });
+      } catch (error: any) {
+        setError(error.response.data.error);
+      }
     };
-    fetchWorkouts();
-  }, []);
+    if (user) {
+      fetchWorkouts();
+    }
+  }, [dispatch, user]);
 
   const handleDelete = async (id: string) => {
-    const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/workouts/${id}`
-    );
-
-    dispatch({ type: "DELETE_WORKOUT", payload: response.data });
+    try {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_REACT_APP_SERVER}/api/workouts/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      dispatch({ type: "DELETE_WORKOUT", payload: response.data });
+    } catch (error: any) {
+      console.log(error.message);
+    }
   };
 
   return (
-    <div className="mx-10 my-10 grid grid-cols-1 gap-3 md:grid-cols-3">
-      {!workouts && (
-        <div>
-          <h1>Add a workout...</h1>
+    <div className="relative mx-10 my-10 grid grid-cols-1 gap-3 md:grid-cols-3">
+      {!user && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform">
+          <h1 className="text-2xl font-bold">Login to add a workout</h1>
         </div>
       )}
       {workouts?.map((workout: Props) => (

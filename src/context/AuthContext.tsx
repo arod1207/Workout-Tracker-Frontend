@@ -22,8 +22,6 @@ export const authReducer = (state: any, action: any) => {
 };
 
 export const AuthContextProvider = ({ children }: Props) => {
-  // const user = JSON.parse(localStorage.getItem("user"));
-
   const [state, dispatch] = useReducer(authReducer, {
     user: null,
   });

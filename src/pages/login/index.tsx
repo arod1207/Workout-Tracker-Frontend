@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useLogin } from "@/hooks/useLogin";
 import { ClipLoader } from "react-spinners";
+import { useRouter } from "next/router";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -9,10 +10,13 @@ export default function Login() {
   const [emptyFields, setEmptyFields] = useState<string[]>([]);
   const { login, error, isLoading } = useLogin();
 
+  const router = useRouter();
+
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     try {
       await login(email, password);
+      router.push("/");
     } catch (error: any) {
       console.log(error.message);
     }
