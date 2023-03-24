@@ -13,7 +13,6 @@ type Props = {
 export default function Home() {
   const { user } = useAuthContext() as Props;
 
-  console.log(user);
   const router = useRouter();
 
   useEffect(() => {

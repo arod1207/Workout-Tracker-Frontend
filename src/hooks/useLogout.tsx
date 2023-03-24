@@ -1,5 +1,6 @@
 import { Dispatch } from "react";
 import { useAuthContext } from "./useAuthContext";
+import { useWorkoutContext } from "./useWorkoutsContext";
 
 type Props = {
   dispatch: Dispatch<{
@@ -7,8 +8,16 @@ type Props = {
   }>;
 };
 
+type WorkoutProps = {
+  dispatch: Dispatch<{
+    type: string;
+    payload: null;
+  }>;
+};
+
 export const useLogout = () => {
   const { dispatch } = useAuthContext() as Props;
+  const { dispatch: workoutDispatch } = useWorkoutContext() as WorkoutProps;
 
   const logout = () => {
     //remove user from storage//
@@ -16,6 +25,7 @@ export const useLogout = () => {
 
     //Logout User
     dispatch({ type: "LOGOUT" });
+    workoutDispatch({ type: "SET_WORKOUTS", payload: null });
   };
   return { logout };
 };

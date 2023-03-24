@@ -1,14 +1,16 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useLogin } from "@/hooks/useLogin";
 import { ClipLoader } from "react-spinners";
 import { useRouter } from "next/router";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emptyFields, setEmptyFields] = useState<string[]>([]);
   const { login, error, isLoading } = useLogin();
+  const { user } = useAuthContext();
 
   const router = useRouter();
 
@@ -16,11 +18,16 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(email, password);
-      router.push("/");
     } catch (error: any) {
       console.log(error.message);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user]);
 
   return (
     <>

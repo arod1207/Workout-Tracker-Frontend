@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useSignup } from "@/hooks/useSignup";
 import { ClipLoader } from "react-spinners";
@@ -22,14 +22,16 @@ export default function Signup() {
 
     try {
       await signup(email, password);
-
-      if (user) {
-        router.push("/");
-      }
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user]);
 
   return (
     <>
