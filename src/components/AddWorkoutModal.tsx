@@ -72,39 +72,45 @@ export default function AddWorkoutModal({ setShow }: Props) {
     <div className="">
       <form onSubmit={handleAddWorkout}>
         <div className="flex flex-col justify-center gap-3 px-6 md:flex-row">
-          <input
-            type="text"
-            placeholder="Workout"
-            className={`${
-              emptyFields?.includes("title")
-                ? "rounded border-2 border-red-500 px-2 py-1"
-                : "rounded border-2 border-green-500 px-2 py-1"
-            }`}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <input
-            type="number"
-            placeholder="Reps"
-            className={`${
-              emptyFields?.includes("reps")
-                ? "rounded border-2 border-red-500 px-2 py-1"
-                : "rounded border-2 border-green-500 px-2 py-1"
-            }`}
-            value={reps}
-            onChange={(e) => setReps(parseInt(e.target.value))}
-          />
-          <input
-            type="number"
-            placeholder="Weight"
-            className={`${
-              emptyFields?.includes("weight")
-                ? "rounded border-2 border-red-500 px-2 py-1"
-                : "rounded border-2 border-green-500 px-2 py-1"
-            }`}
-            value={load}
-            onChange={(e) => setLoad(parseInt(e.target.value))}
-          />
+          <div className="flex flex-col">
+            <label>Workout</label>
+            <input
+              type="text"
+              className={`${
+                emptyFields?.includes("title")
+                  ? "rounded border-2 border-red-500 px-2 py-1"
+                  : "rounded border-2 border-green-500 px-2 py-1"
+              }`}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label># of reps</label>
+            <input
+              type="number"
+              className={`${
+                emptyFields?.includes("reps")
+                  ? "rounded border-2 border-red-500 px-2 py-1"
+                  : "rounded border-2 border-green-500 px-2 py-1"
+              }`}
+              value={reps}
+              onChange={(e) => setReps(parseInt(e.target.value))}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label>Weight</label>
+            <input
+              type="number"
+              className={`${
+                emptyFields?.includes("weight")
+                  ? "rounded border-2 border-red-500 px-2 py-1"
+                  : "rounded border-2 border-green-500 px-2 py-1"
+              }`}
+              value={load}
+              onChange={(e) => setLoad(parseInt(e.target.value))}
+            />
+          </div>
         </div>
         <div className="flex justify-center py-2">
           <button className="rounded-md border-2 border-green-500 bg-green-500 px-2 py-1 text-white">
