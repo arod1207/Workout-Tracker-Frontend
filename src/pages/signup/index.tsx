@@ -21,7 +21,7 @@ export default function Signup() {
     e.preventDefault();
 
     try {
-      await signup(email, password);
+      await signup(email.toLocaleLowerCase(), password);
     } catch (error) {
       console.log(error);
     }
