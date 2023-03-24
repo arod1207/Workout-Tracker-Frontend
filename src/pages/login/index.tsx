@@ -17,7 +17,7 @@ export default function Login() {
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await login(email, password);
+      await login(email.toLocaleLowerCase(), password);
     } catch (error: any) {
       console.log(error.message);
     }
